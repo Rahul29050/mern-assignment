@@ -1,65 +1,35 @@
-# Debugging Practice Assignment
+✅ Summary of Changes
+This pull request addresses several bugs and introduces new functionality as outlined in the original assignment.
 
-This is a full-stack Next.js + Express + PostgreSQL project containing  bugs for this Assignment
+Bug Fixes:
+Issue 1 (State Management): Fixed the state update for the user list. Instead of using Array.prototype.push(), which mutates the original array, the setUsers function now uses the spread operator (...) to create a new array, correctly updating the state and triggering a re-render.
 
-## Setup Instructions
+Issue 2 (Query Result): Corrected the API endpoint for fetching users. The query was not being awaited, causing the server to return a promise object instead of the actual data. await pool.query(...) now correctly returns the user rows.
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up environment variables:
-   Create a `.env` file in the root directory with:
-   ```
-   PGURL=postgres://your_connection_string_here
-   PORT=3001
-   ```
+Issue 3 (DB Operation Failure): The INSERT query in the backend had a typo in the table name (user instead of users). This has been corrected.
 
-4. Start the backend server:
-   ```bash
-   npm run server
-   ```
+Issue 4 (Connection Issues): The database connection code was reviewed and best practices were applied. While the core issue was a connection refusal, connection timeouts were added for better handling in a production environment.
 
-5. In a new terminal, start the frontend:
-   ```bash
-   npm run dev
-   ```
+Issue 5 (Unreliable Data Fetching): The useEffect hook in the frontend was refactored to use async/await with a proper try...catch block for reliable error handling during data fetching.
 
-## The Challenge
+Issue 8 (Form Submission): The handleSubmit function now uses a try...catch block for robust error handling and provides user feedback if the form submission fails.
 
-This is a full-stack application with several bugs that need to be fixed and a new feature to be implemented. You have 45 minutes total.
+New Features:
+Delete User Functionality:
 
-### Part 1: Bug Fixing (30-35 minutes)
-Find and fix as many bugs as you can. The issues range from simple to complex and may involve:
-- Frontend functionality
-- Backend operations
-- Database interactions
-- Application configuration
-- Performance issues
-- Error handling
+Frontend: A "Delete" button has been added next to each user in the list. Clicking this button triggers a new handleDelete function.
 
-### Part 2: Feature Implementation (10-15 minutes)
-Add a "Delete User" feature:
-- Add a delete button next to each user
-- Implement a DELETE /api/users/:id endpoint
-- Handle the deletion in the frontend
-- Update the UI accordingly
+Backend: A new DELETE /api/users/:id endpoint was created to handle user deletion from the database. It uses a DELETE query with a WHERE clause to target the specific user by ID.
 
-Note: Implement the feature only after fixing critical bugs to ensure proper functionality.
+UI Update: The frontend now filters the user list after a successful deletion, removing the user from the UI without needing to refetch the entire list.
 
-### Success Criteria
-- Users should load correctly on the homepage
-- You should be able to add a new user
-- The app should handle duplicate email addresses gracefully
-- All database operations should work correctly
+📝 Notes and Assumptions
+This project assumes that the user has a PostgreSQL database server running locally and has the correct credentials configured in the .env file.
 
-### Deliverable
-Create a new branch named `fix-yourname` with your solutions and push it to the repository.
+The ssl: { rejectUnauthorized: false } configuration was added to the PostgreSQL connection pool to prevent connection errors with some hosting providers. This may be removed if a different setup is used.
 
-## Project Structure
-- `/src/app` - Next.js frontend
-- `/server` - Express backend
-- `/server/db` - Database configuration and queries
+The code includes basic error handling for common issues like email duplication (unique constraint violation) and network failures.
 
-Good luck!
+Repository Link:
+
+https://github.com/Rahul29050/mern-assignment/tree/fix-Rahul
